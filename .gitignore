@@ -1,0 +1,69 @@
+# === Secrets & Environment ===
+.env
+*.env
+.env.*
+!.env.example
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+venv/
+.venv/
+env/
+ENV/
+.python-version
+
+# === Data files (too large for git) ===
+data/raw/
+data/*.txt
+data/*.csv
+data/*.tsv
+data/*.gz
+!data/sample_nodes.csv.example
+!data/sample_edges.csv.example
+
+# === Results (raw CSVs, generated charts) ===
+results/raw/
+results/charts/*.png
+results/charts/*.svg
+# Keep: results/charts/.gitkeep
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# === Docker volumes ===
+volumes/
+docker-data/
+
+# === Logs ===
+*.log
+logs/
+
+# === Jupyter (if used for analysis) ===
+.ipynb_checkpoints/
+*.ipynb
+
+# === pytest ===
+.pytest_cache/
+.coverage
+htmlcov/

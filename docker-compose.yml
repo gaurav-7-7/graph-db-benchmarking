@@ -1,0 +1,58 @@
+version: "3.9"
+
+# ============================================================
+# CognoDB Benchmark — Local Graph Databases
+# Resource caps match CognoDB free tier: 0.5 vCPU, 256 MB RAM
+# ============================================================
+
+services:
+
+  # ── FalkorDB ─────────────────────────────────────────────
+  # Redis-based graph database using the Bolt/Cypher protocol
+  # Port 7688 (Bolt) to avoid conflict with AuraDB/CognoDB
+  falkordb:
+    image: falkordb/falkordb:v4.3.0
+    container_name: benchmark_falkordb
+    ports:
+      - "7688:7687"     # Bolt protocol
+      - "6380:6379"     # Redis protocol (optional)
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    volumes:
+      - falkordb_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── ArangoDB ─────────────────────────────────────────────
+  # Multi-model graph + document DB using AQL
+  arango:
+    image: arangodb:3.12.2
+    container_name: benchmark_arango
+    ports:
+      - "8529:8529"     # HTTP API
+    environment:
+      ARANGO_ROOT_PASSWORD: benchmarkpass
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    volumes:
+      - arango_data:/var/lib/arangodb3
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8529/_api/version"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  falkordb_data:
+  arango_data:
